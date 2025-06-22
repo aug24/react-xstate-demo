@@ -4,7 +4,9 @@ type CounterContext = {
     count: number
 }
 
-type CounterEvent = { type: 'INCREMENT' }
+
+
+type CounterEvent = { type: 'INCREMENT' } | { type: 'DECREMENT' }
 
 export const counterMachine = createMachine({
     id: 'counter',
@@ -22,10 +24,19 @@ export const counterMachine = createMachine({
                     count: (state) => state.context.count + 1
                 }),
                 ({context}) => {
-                    console.log(context);
+                    console.log("Incrementing", context);
                 }
             ]
-
+        },
+        DECREMENT: {
+            actions: [
+                assign({
+                    count: (state) => state.context.count - 1
+                }),
+                ({context}) => {
+                    console.log("Decrementing", context);
+                }
+            ]
         }
     }
 })

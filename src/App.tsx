@@ -3,6 +3,8 @@ import './App.css'
 import {createActor} from "xstate";
 import {counterMachine} from "./counterMachine.tsx";
 import {useSelector} from "@xstate/react";
+import {IncrementButton} from "./components/IncrementButton.tsx";
+import {DecrementButton} from "./components/DecrementButton.tsx";
 
 function App() {
 
@@ -16,11 +18,11 @@ function App() {
 
   return (
     <>
-      <div className="card">
-        <button onClick={() => actor.send({type: 'INCREMENT'})}>
-          count is {count}
-        </button>
-      </div>
+        <div className="card">
+            <p>count is {count}</p>
+            <IncrementButton onClick={() => actor.send({type: 'INCREMENT'})}/>
+            <DecrementButton onClick={() => actor.send({type: 'DECREMENT'})}/>
+        </div>
     </>
   )
 }
