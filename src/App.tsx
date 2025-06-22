@@ -15,6 +15,8 @@ function App() {
     }, [])
 
   const count = useSelector(actor, (state) => state.context.count);
+  const error = useSelector(actor, (state) => state.context.error);
+  const value = useSelector(actor, (state) => state.value);
 
   return (
     <>
@@ -22,6 +24,8 @@ function App() {
             <p>count is {count}</p>
             <IncrementButton onClick={() => actor.send({type: 'INCREMENT'})}/>
             <DecrementButton onClick={() => actor.send({type: 'DECREMENT'})}/>
+            <p>{value.toString()}</p>
+            {error && (<p>{error}</p>)}
         </div>
     </>
   )

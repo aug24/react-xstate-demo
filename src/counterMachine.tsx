@@ -10,31 +10,54 @@ const StateMachineCounterEventType = {} as CounterEvent;
 
 export const counterMachine = createMachine({
     id: 'counter',
+    initial: 'initial',
     context: initialContext,
     types: {
         context: StateMachineCounterContextType,
         events: StateMachineCounterEventType,
     },
     on: {
-        INCREMENT: {
-            actions: [
-                assign({
-                    count: ({context: {count}}) => count + 1
-                }),
-                ({context}) => {
-                    console.log("Incrementing", context);
-                }
-            ]
-        },
-        DECREMENT: {
-            actions: [
-                assign({
-                    count: ({context: {count}}) => count - 1
-                }),
-                ({context}) => {
-                    console.log("Decrementing", context);
-                }
-            ]
-        }
-    }
+        INCREMENT: [
+            {
+                target: '.incremented',
+                guard: (state) => state.context.count < 4,
+                actions:
+                    assign({
+                        count: ({context: {count}}) => count + 1,
+                        error: () => undefined,
+                    }),
+            },
+            {
+                target: '.unchanged',
+                actions:
+                    assign({
+                        error: () => "No more!",
+                    }),
+            }
+        ],
+        DECREMENT: [
+            {
+                target: '.decremented',
+                guard: (state) => state.context.count > 0,
+                actions:
+                    assign({
+                        count: ({context: {count}}) => count - 1,
+                        error: () => undefined,
+                    }),
+            },
+            {
+                target: '.decremented',
+                actions:
+                    assign({
+                        error: () => "No less!",
+                    }),
+            }
+        ]
+    },
+    states: {
+        initial: {},
+        incremented: {},
+        decremented: {},
+        unchanged: {},
+    },
 })
