@@ -1,5 +1,7 @@
 import {assign, createMachine} from "xstate";
 import {type CounterContext, initialContext} from "./counter/Counter.tsx";
+import {getIncrementedCount, mayIPleaseIncrement} from "./components/IncrementButton.tsx";
+import {getDecrementedCount, mayIPleaseDecrement} from "./components/DecrementButton.tsx";
 
 type CounterEvent = { type: 'INCREMENT' } | { type: 'DECREMENT' } | { type: 'CHANGE', id: string, value: string }
 
@@ -20,10 +22,10 @@ export const counterMachine = createMachine({
         INCREMENT: [
             {
                 target: '.incremented',
-                guard: (state) => state.context.name === 'Justin' || state.context.count < 4,
+                guard: (state) => mayIPleaseIncrement(state.context),
                 actions:
                     assign({
-                        count: ({context: {count}}) => count + 1,
+                        count: getIncrementedCount(),
                         error: () => undefined,
                     }),
             },
@@ -38,10 +40,10 @@ export const counterMachine = createMachine({
         DECREMENT: [
             {
                 target: '.decremented',
-                guard: (state) => state.context.name === 'Justin' || state.context.count > 0,
+                guard: (state) => mayIPleaseDecrement(state.context),
                 actions:
                     assign({
-                        count: ({context: {count}}) => count - 1,
+                        count: getDecrementedCount(),
                         error: () => undefined,
                     }),
             },
